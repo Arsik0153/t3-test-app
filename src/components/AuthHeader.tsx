@@ -5,8 +5,6 @@ import { useState } from "react";
 const AuthHeader: React.FC = () => {
   const { data: sessionData } = useSession();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  console.log(sessionData);
-
 
   const handleSignClick = (): void => {
     if (sessionData) {

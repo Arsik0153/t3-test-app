@@ -1,10 +1,12 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import AuthHeader from "~/components/AuthHeader";
+import Header from "~/components/Header";
+import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
-  // const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const { data: posts } = api.post.getAll.useQuery();
+  console.log(posts);
 
   return (
     <>
@@ -14,35 +16,28 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="min-h-screen bg-gray-50">
-        <div className="min-w-full px-6 md:px-0 bg-white h-16 border border-b-2 border-gray-100 flex justify-center">
-          <div className="max-w-screen-lg w-full flex justify-between items-center">
-            <h1 className="text-slate-700 font-bold text-lg">T3 Blog</h1>
-            <AuthHeader />
-          </div>
-        </div>
+        <Header />
 
         {/* Hero section */}
-        <div className="my-20 text-center">
+        <div className="my-16 text-center">
           <h1 className="text-8xl font-bold text-gray-800">Blog</h1>
+          <Link href="/new">
+            <button className="w-48 mt-8 bg-slate-700 text-white py-2 rounded-md hover:bg-slate-600">
+              <span className="text-xl mr-2 h-fit leading-none">+</span>
+              Write new post
+            </button>
+          </Link>
         </div>
 
         {/* Blog posts */}
         <div className="max-w-screen-lg w-full mx-auto mt-12 grid grid-cols-3 gap-5">
-          <div className="border border-gray-200 shadow-sm rounded-lg p-5 bg-white">
-            <h2 className="font-bold text-xl">First Blog post</h2>
-            <p className="mt-3 font-light text-base">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quaerat obcaecati atque fugit quasi aut nisi deserunt qui dolores, perferendis alias.</p>
-            <Link href="/" className="align-middle underline mt-3 block">Read More →</Link>
-          </div>
-          <div className="border border-gray-200 shadow-sm rounded-lg p-5 bg-white">
-            <h2 className="font-bold text-xl">First Blog post</h2>
-            <p className="mt-3 font-light text-base">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quaerat obcaecati atque fugit quasi aut nisi deserunt qui dolores, perferendis alias.</p>
-            <Link href="/" className="align-middle underline mt-3 block">Read More →</Link>
-          </div>
-          <div className="border border-gray-200 shadow-sm rounded-lg p-5 bg-white">
-            <h2 className="font-bold text-xl">First Blog post</h2>
-            <p className="mt-3 font-light text-base">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quaerat obcaecati atque fugit quasi aut nisi deserunt qui dolores, perferendis alias.</p>
-            <Link href="/" className="align-middle underline mt-3 block">Read More →</Link>
-          </div>
+          {posts && posts.map(post => (
+            <div className="border border-gray-200 shadow-sm rounded-lg p-5 bg-white" key={post.id}>
+              <h2 className="font-bold text-xl">{post.title}</h2>
+              <p className="mt-3 font-light text-base">{post.content}</p>
+              <Link href="/" className="align-middle underline mt-3 block">Read More →</Link>
+            </div>
+          ))}
         </div>
       </main>
     </>
